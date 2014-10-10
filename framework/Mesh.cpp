@@ -244,6 +244,6 @@ Mesh Mesh::FromFile(string filepath){
 	file.close();
 
 	}
-	*/
+
 	return NULL;
 }

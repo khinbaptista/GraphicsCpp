@@ -10,6 +10,8 @@
 
 #include <fstream>
 
+#include <fstream>
+
 #include "MeshData.h"
 #include "ShaderProgram.h"
 
