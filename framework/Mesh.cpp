@@ -235,14 +235,13 @@ void Mesh::RotateZ(GLfloat angle){
 }
 
 Mesh Mesh::FromFile(string filepath){
-	FILE *file;
-	fopen_s(&file, filepath.c_str(), "r");
-	
-	if (file == NULL)
-	{
-		cout << "Impossible to open file: " << filepath;
-		return NULL;
-	}
+	ifstream file;
+
+	file.open(filepath, ifstream::in);
+
+	// STUFF
+
+	file.close();
 
 	return NULL;
 }
