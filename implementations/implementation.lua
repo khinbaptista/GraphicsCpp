@@ -1,0 +1,2 @@
+
+SetupProject("Testing", "implementation.cpp")
