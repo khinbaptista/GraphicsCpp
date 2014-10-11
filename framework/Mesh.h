@@ -63,7 +63,7 @@ public:
 	Mesh(ShaderProgram *shader, MeshData *data);
 	~Mesh(void);
 
-	static Mesh FromFile(string filepath);
+	static Mesh* FromFile(ShaderProgram *shader, string filepath);
 
 	void AddVertex(vec3 vertex);
 	void AddNormal(vec3 normal);

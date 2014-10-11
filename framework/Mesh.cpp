@@ -234,16 +234,93 @@ void Mesh::RotateZ(GLfloat angle){
 	rotationMatrix = glm::rotate(angle, vec3(0, 0, 1)) * rotationMatrix;
 }
 
-Mesh Mesh::FromFile(string filepath){
-	ifstream file;
+Mesh* Mesh::FromFile(ShaderProgram *shader, string filepath){
+	MeshData meshData;
+	vector<vec3> positions;
+	vector<vec3> normals;
+	vector<vec2> texCoords;
 
-	file.open(filepath, ifstream::in);
+	FILE *file = fopen(filepath.c_str(), "r");
 
-	// STUFF
-
-	file.close();
-
+	if (file == NULL){
+		cout << "Could not open file " << filepath;
+		return NULL;
 	}
 
-	return NULL;
+	char char_line[256];
+	int filestatus = fscanf(file, "%s", char_line);
+
+	while (filestatus != EOF){
+		string line = char_line;
+
+		if (line.size() == 0 || line.substr(0, 1) == "#")
+			continue;
+
+		if (line.substr(0, 2) == "v "){
+			vec3 v;
+			fscanf(file, "%f %f %f\n", &v.x, &v.y, &v.z);
+			positions.push_back(v);
+			continue;
+		}
+
+		if (line.substr(0, 3) == "vn "){
+			vec3 n;
+			fscanf(file, "%f %f %f\n", &n.x, &n.y, &n.z);
+			normals.push_back(n);
+			continue;
+		}
+
+		if (line.substr(0, 3) == "vt "){
+			vec2 t;
+			fscanf(file, "%f %f %f\n", &t.x, &t.y);
+			texCoords.push_back(t);
+			continue;
+		}
+
+		if (line.substr(0, 2) == "f "){
+			uint vi[3], ti[3], ni[3];
+
+			if (line.size() < 17){
+				int matches = fscanf(file, "%d//%d %d//%d %d//%d\n", vi[0], ni[0], vi[1], ni[1], vi[2], ni[2]);
+
+				if (matches != 6){	// wrong format
+					cout << "";
+					fclose(file);
+					return NULL;
+				}
+
+				for (int i = 0; i < 3; i++){
+					VertexUnit unit(positions[vi[i]], normals[ni[i]], vec2(-1.0f, -1.0f));
+
+					meshData.AddVertexUnit(unit);
+				}
+
+				continue;
+			}
+			else {
+				int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", vi[0], ti[0], ni[0], vi[1], ti[1], ni[1], vi[2], ti[2], ni[2]);
+
+				if (matches != 9){	// wrong format
+					cout << "";
+					fclose(file);
+					return NULL;
+				}
+
+				for (int i = 0; i < 3; i++){
+					VertexUnit unit(positions[vi[i]], normals[ni[i]], texCoords[ti[i]]);
+
+					meshData.AddVertexUnit(unit);
+				}
+
+				continue;
+			}
+		}
+
+		// if line starts with anything else (mtllib, usemtl), it is ignored (for now).
+
+		filestatus = fscanf(file, "%s", char_line);
+	}
+
+	fclose(file);
+	return new Mesh(shader, &meshData);
 }
