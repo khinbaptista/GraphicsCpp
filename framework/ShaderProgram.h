@@ -49,7 +49,7 @@ public:
 	void Activate(void);
 
 	// Deactivates this program
-	void Deactvate(void);
+	void Deactivate(void);
 	
 	// Retrieves the location of a uniform variable inside the shaders
 	GLint GetVariableLocation(string name);

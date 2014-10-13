@@ -93,7 +93,7 @@ void ShaderProgram::Activate(void){
 	glUseProgram(id);
 }
 
-void ShaderProgram::Deactvate(void){
+void ShaderProgram::Deactivate(void){
 	glUseProgram(0);
 }
 
