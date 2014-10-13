@@ -1,5 +1,7 @@
 /.project
 
+
+
 ## Ignore Visual Studio Solution and Project files - using premake, so we don't want them versioned
 *.vcxproj*
 *.sln
@@ -31,6 +33,10 @@ Makefile
 *.userosscache
 *.sln.docstates
 
+# Special
+framework/lib
+
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -42,6 +48,7 @@ build/
 bld/
 [Bb]in/
 [Oo]bj/
+
 
 # Roslyn cache directories
 *.ide/
@@ -206,3 +213,9 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+
+
+
+
+!mySdk/**
