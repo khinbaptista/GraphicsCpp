@@ -2,6 +2,7 @@
 
 #include "ShaderProgram.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -13,6 +14,31 @@ ShaderProgram::ShaderProgram(void){
 
 ShaderProgram::~ShaderProgram(void){
 	glDeleteProgram(id);
+}
+
+bool ShaderProgram::CreateShader(const char *fileName, GLenum shaderType){
+	char* fileText;
+	FILE *file = fopen(fileName, "rt");
+
+	if (file != NULL) {
+		fseek(file, 0, SEEK_END);
+		int count = ftell(file);
+		rewind(file);
+
+		if (count > 0) {
+			fileText = (char*)malloc(sizeof(char) * (count + 1));
+			count = fread(fileText, sizeof(char), count, file);
+			fileText[count] = '\0';
+		}
+		fclose(file);
+
+		return CreateShader(shaderType, fileText);
+	}
+	else
+	{
+		cout << "Error creating shader (problem with file)" << std::endl;
+		return false;
+	}
 }
 
 bool ShaderProgram::CreateShader(GLenum shaderType, const char *sourceCode){
@@ -28,12 +54,14 @@ bool ShaderProgram::CreateShader(GLenum shaderType, const char *sourceCode){
 	glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
 	glGetShaderInfoLog(shaderID, infoLogLength, NULL, info);
 
+
 	if (statusCode != 1)
 	{
 		glDeleteShader(shaderID);
 		cout << "Error creating shader (status code: " << statusCode << ")\n" << info;
 		return false;
 	}
+
 
 	if (shaderType == GL_VERTEX_SHADER)
 		vertexShaderID = shaderID;
@@ -50,7 +78,7 @@ bool ShaderProgram::Link(void){
 
 	if (vertexShaderID != -1)
 		glAttachShader(id, vertexShaderID);
-	
+
 	if (fragmentShaderID != -1)
 		glAttachShader(id, fragmentShaderID);
 
@@ -102,7 +130,7 @@ GLint ShaderProgram::GetVariableLocation(string name){
 	bool found = false;
 	uint i = 0;
 
-	while(i < names.size() && !found)
+	while (i < names.size() && !found)
 	{
 		if (names[i].compare(name) == 0)
 		{

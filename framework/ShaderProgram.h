@@ -40,6 +40,7 @@ public:
 	~ShaderProgram(void);
 
 	// Creates a new shader in this program
+	bool CreateShader(const char *fileName, GLenum shaderType);
 	bool CreateShader(GLenum shaderType, const char *sourceCode);
 	
 	// Links the program to OpenGL

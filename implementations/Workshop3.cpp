@@ -43,7 +43,7 @@ const std::string strFragmentShader(
 
 vec2 ComputePositionOffsets()
 {
-	const float fLoopDuration = 1.0f;
+	const float fLoopDuration = 5.0f;
 	const float fScale = 3.14159f * 2.0f / fLoopDuration;
 
 	float fElapsedTime = SDL_GetTicks() / 1000.0f;
@@ -73,14 +73,14 @@ void render(){
 	glDisableVertexAttribArray(0); //cleanup
 
 
-	shaderProgram->Deactvate();
+	shaderProgram->Deactivate();
 }
 
 
 void initialize()
 {
 	shaderProgram = new ShaderProgram();
-	shaderProgram->CreateShader(GL_VERTEX_SHADER, strVertexShader.c_str());
+	shaderProgram->CreateShader("vertexShader.vsh", GL_VERTEX_SHADER );
 	shaderProgram->CreateShader(GL_FRAGMENT_SHADER, strFragmentShader.c_str());
 
 	shaderProgram->Link();

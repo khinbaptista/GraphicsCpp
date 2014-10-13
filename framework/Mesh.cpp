@@ -219,7 +219,7 @@ void Mesh::Draw(void){
 	glDisableVertexAttribArray(ARRAYINDEX_VERTEXCOLOR);
 	glDisableVertexAttribArray(ARRAYINDEX_VERTEXNORMAL);
 	glDisableVertexAttribArray(ARRAYINDEX_VERTEXTEXTUREUV);
-	shader.Deactvate();
+	shader.Deactivate();
 }
 
 void Mesh::RotateX(GLfloat angle){
