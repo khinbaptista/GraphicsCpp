@@ -34,7 +34,7 @@ Makefile
 *.sln.docstates
 
 # Special
-framework/lib
+*.lib
 
 
 # Build results

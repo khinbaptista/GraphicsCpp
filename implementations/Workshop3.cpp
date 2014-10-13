@@ -19,28 +19,6 @@ const float vertexPositions[] = {
 	0.4330127f, -0.25f, 0.0f, 1.0f,
 };
 
-const std::string strVertexShader(
-	"#version 330\n"
-	"layout(location = 0) in vec4 position;\n"
-	"uniform vec2 offset;\n"
-	"void main()\n"
-	"{\n"
-	"	vec4 vecOffset = vec4(offset.x,offset.y,0.0f,0.0f);\n"
-	"   gl_Position = position + vecOffset;\n"
-	"}\n"
-	);
-//vec4(1.0f, 0.0f, 0.0f, 0.0f);
-
-//string holding the **source** of our fragment shader, to save loading from a file
-const std::string strFragmentShader(
-	"#version 330\n"
-	"out vec4 outputColor;\n"
-	"void main()\n"
-	"{\n"
-	"   outputColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
-	"}\n"
-	);
-
 vec2 ComputePositionOffsets()
 {
 	const float fLoopDuration = 5.0f;
@@ -59,7 +37,7 @@ void render(){
 
 	
 	actualOffset += addOffset;
-	shaderProgram->SetVariable("offset", ComputePositionOffsets());
+	shaderProgram->SetVariable("elapsedTime", SDL_GetTicks());
 	shaderProgram->Activate(); // set variable deactivates..
 	glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject); //bind positionBufferObject
 
@@ -68,7 +46,13 @@ void render(){
 
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0); //define **how** values are reader from positionBufferObject in Attrib 0
 
+	shaderProgram->SetVariable("loopDuration", 5.0f);
+	shaderProgram->Activate();
 	glDrawArrays(GL_TRIANGLES, 0, 3); //Draw something, using Triangles, and 3 vertices - i.e. one lonely triangle
+
+	shaderProgram->SetVariable("loopDuration", 2.5f);
+	shaderProgram->Activate();
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	glDisableVertexAttribArray(0); //cleanup
 
@@ -81,11 +65,13 @@ void initialize()
 {
 	shaderProgram = new ShaderProgram();
 	shaderProgram->CreateShader("vertexShader.vsh", GL_VERTEX_SHADER );
-	shaderProgram->CreateShader(GL_FRAGMENT_SHADER, strFragmentShader.c_str());
+	shaderProgram->CreateShader("fragmentShader.fsh", GL_FRAGMENT_SHADER);
 
 	shaderProgram->Link();
 
 
+	//shaderProgram->SetVariable("loopDuration", 5.0f); //only sets loop duration once
+	shaderProgram->SetVariable("fragLoopDuration", 5.0f); //only sets loop duration once
 
 
 	glGenBuffers(1, &positionBufferObject);
