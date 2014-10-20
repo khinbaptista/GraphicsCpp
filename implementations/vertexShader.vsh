@@ -3,6 +3,8 @@
 layout(location = 0) in vec4 position;
 uniform float loopDuration;
 uniform float elapsedTime;
+uniform mat4 rotation;
+uniform mat4 modelMatrix;
 
 void main()
 {
@@ -15,5 +17,6 @@ void main()
         0.0f,
         0.0f);
     
-    gl_Position = position + totalOffset;
+    //gl_Position =  (position + totalOffset) * rotation;
+	gl_Position = modelMatrix * position;
 }
