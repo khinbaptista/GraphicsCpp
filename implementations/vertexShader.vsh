@@ -1,10 +1,13 @@
 #version 330
 
 layout(location = 0) in vec4 position;
+layout(location = 1) in vec4 color;
 uniform float loopDuration;
 uniform float elapsedTime;
 uniform mat4 rotation;
 uniform mat4 modelMatrix;
+
+smooth out vec4 theColor;
 
 void main()
 {
@@ -16,7 +19,10 @@ void main()
         sin(currTime * timeScale) * 0.5f,
         0.0f,
         0.0f);
-    
     //gl_Position =  (position + totalOffset) * rotation;
 	gl_Position = modelMatrix * position;
+	
+	//gl_Position = position;
+	theColor = color;
+	
 }

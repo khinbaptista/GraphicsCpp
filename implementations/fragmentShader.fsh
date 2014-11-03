@@ -1,5 +1,6 @@
 #version 330
 
+smooth in vec4 theColor;
 out vec4 outputColor;
 
 uniform float fragLoopDuration;
@@ -13,5 +14,6 @@ void main()
 	float timeScale = 3.14159f;
 	float currLerp = mod(elapsedTime/1000, fragLoopDuration)/ fragLoopDuration;
 
-    outputColor = mix(firstColor, secondColor, sin(currLerp * timeScale));
+    //outputColor = mix(firstColor, secondColor, sin(currLerp * timeScale));
+	outputColor = theColor;
 }
